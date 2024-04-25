@@ -28,12 +28,19 @@ async function run() {
   try {
     const coffeeCollection = client.db("usersDB").collection("coffees");
 
+    //GET
+    app.get("/coffees", async (req, res) => {
+      const result = await coffeeCollection.find().toArray();
+      res.send(result);
+    });
+
     //POST
     app.post("/coffees", async (req, res) => {
       const result = await coffeeCollection.insertOne(req.body);
       res.send(result);
     });
-  } finally {
+  } catch (err) {
+    console.error("Database Failure -->", err);
   }
 }
 run().catch(console.dir);
